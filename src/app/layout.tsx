@@ -1,7 +1,7 @@
 import Footer from "@/components/footer/Footer";
 import Header from "@/components/header/Header";
 import ThemeRegistry from "@/components/theme-registry/theme.registry";
-
+import NextAuthWrapper from "@/lib/nextAuthProvider";
 export default function RootLayout({
   children,
 }: {
@@ -11,9 +11,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeRegistry>
-          <Header />
-          {children}
-          <Footer/>
+          <NextAuthWrapper>
+            <Header />
+            {children}
+            <Footer />
+          </NextAuthWrapper>
         </ThemeRegistry>
       </body>
     </html>

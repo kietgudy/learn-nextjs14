@@ -20,6 +20,7 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -62,6 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+  const { data: session } = useSession();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -161,24 +163,27 @@ export default function Header() {
       </MenuItem>
     </Menu>
   );
-const handleBackHome = () => {
-    router.push("/")
-}
+  const handleBackHome = () => {
+    router.push("/");
+  };
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ background: "#333" }}>
         <Container>
           <Toolbar>
-            <Box onClick={() => handleBackHome()} sx={{cursor: "pointer", display: "flex", alignItems: "center"}}>
-            <GraphicEqIcon sx={{ marginRight: "5px" }} />
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
+            <Box
+              onClick={() => handleBackHome()}
+              sx={{ cursor: "pointer", display: "flex", alignItems: "center" }}
             >
-              SoundMusic
-            </Typography>
+              <GraphicEqIcon sx={{ marginRight: "5px" }} />
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{ display: { xs: "none", sm: "block" } }}
+              >
+                SoundMusic
+              </Typography>
             </Box>
             <Search>
               <SearchIconWrapper>
@@ -202,36 +207,44 @@ const handleBackHome = () => {
                 },
               }}
             >
-              <Link
-                href={"/playlist"}
-                style={{
-                  cursor: "pointer",
-                }}
-              >
-                Playlists
-              </Link>
-              <Link
-                href={"/like"}
-                style={{
-                  cursor: "pointer",
-                }}
-              >
-                Likes
-              </Link>
-              <Link
-                href={"/upload"}
-                style={{
-                  cursor: "pointer",
-                }}
-              >
-                Upload
-              </Link>
-              <Avatar
-                sx={{ cursor: "pointer" }}
-                onClick={handleProfileMenuOpen}
-              >
-                TK
-              </Avatar>
+              {session ? (
+                <>
+                  <Link
+                    href={"/playlist"}
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    Playlists
+                  </Link>
+                  <Link
+                    href={"/like"}
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    Likes
+                  </Link>
+                  <Link
+                    href={"/upload"}
+                    style={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    Upload
+                  </Link>
+                  <Avatar
+                    sx={{ cursor: "pointer" }}
+                    onClick={handleProfileMenuOpen}
+                  >
+                    TK
+                  </Avatar>
+                </>
+              ) : (
+                <>
+                  <Link href={"/api/auth/signin"}>Login</Link>
+                </>
+              )}
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton
